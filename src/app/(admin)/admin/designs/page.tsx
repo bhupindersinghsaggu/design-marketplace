@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { Badge } from '@/components/ui/badge'
 import { formatDate } from '@/lib/utils'
 import { AdminDesignActions } from './actions'
+import { AdminFileDownload } from './admin-file-download'
 import Image from 'next/image'
 
 export default async function AdminDesignsPage() {
@@ -15,7 +16,7 @@ export default async function AdminDesignsPage() {
 
   const { data: designs } = await supabase
     .from('designs')
-    .select('*, creator:profiles(full_name, email), category:categories(name)')
+    .select('*, creator:profiles(full_name, email), category:categories(name), files:design_files(*)')
     .order('created_at', { ascending: false })
 
   const pending = designs?.filter(d => d.status === 'pending') ?? []
@@ -53,6 +54,13 @@ export default async function AdminDesignsPage() {
                     {d.type === 'premium' && <span className="text-sm font-medium text-gray-700">₹{d.price}</span>}
                   </div>
                   {d.description && <p className="text-sm text-gray-600 mt-2 line-clamp-2">{d.description}</p>}
+                  {d.files && d.files.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {d.files.map((f: { file_key: string; original_name: string; file_type: string; file_size: number }) => (
+                        <AdminFileDownload key={f.file_key} fileKey={f.file_key} fileName={f.original_name} fileType={f.file_type} fileSize={f.file_size} />
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <AdminDesignActions designId={d.id} />
               </div>
