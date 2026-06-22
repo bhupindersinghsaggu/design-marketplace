@@ -77,6 +77,7 @@ export default async function AdminDesignsPage() {
             <tr>
               <th className="text-left px-4 py-3 text-gray-600 font-medium">Title</th>
               <th className="text-left px-4 py-3 text-gray-600 font-medium hidden md:table-cell">Creator</th>
+              <th className="text-left px-4 py-3 text-gray-600 font-medium hidden md:table-cell">Email</th>
               <th className="text-left px-4 py-3 text-gray-600 font-medium">Type</th>
               <th className="text-left px-4 py-3 text-gray-600 font-medium">Status</th>
               <th className="text-left px-4 py-3 text-gray-600 font-medium hidden md:table-cell">Date</th>
@@ -87,6 +88,7 @@ export default async function AdminDesignsPage() {
               <tr key={d.id} className="hover:bg-gray-50">
                 <td className="px-4 py-3 font-medium text-gray-900">{d.title}</td>
                 <td className="px-4 py-3 text-gray-500 hidden md:table-cell">{d.creator?.full_name}</td>
+                <td className="px-4 py-3 text-gray-400 hidden md:table-cell">{d.creator?.email}</td>
                 <td className="px-4 py-3"><Badge variant={d.type === 'free' ? 'free' : 'premium'}>{d.type}</Badge></td>
                 <td className="px-4 py-3">
                   <Badge variant={d.status === 'approved' ? 'success' : d.status === 'rejected' ? 'danger' : 'warning'}>{d.status}</Badge>
