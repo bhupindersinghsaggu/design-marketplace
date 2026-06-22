@@ -86,7 +86,7 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-xl mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold text-gray-900 mb-8">Meri Profile</h1>
+      <h1 className="text-2xl font-bold text-gray-900 mb-8">My Profile</h1>
 
       {/* Avatar */}
       <div className="flex items-center gap-6 mb-8">
@@ -114,20 +114,20 @@ export default function ProfilePage() {
           <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
         </div>
         <div>
-          <p className="font-semibold text-gray-900">{fullName || 'Naam nahi hai'}</p>
+          <p className="font-semibold text-gray-900">{fullName || 'No name set'}</p>
           <p className="text-sm text-gray-500">{profile.email}</p>
-          <p className="text-xs text-gray-400 mt-1">Photo pe click karke change karein</p>
+          <p className="text-xs text-gray-400 mt-1">Click the photo to change it</p>
         </div>
       </div>
 
       {/* Profile Form */}
       <form onSubmit={handleSave} className="space-y-5">
         <Input
-          label="Pura Naam"
+          label="Full Name"
           id="full_name"
           value={fullName}
           onChange={e => setFullName(e.target.value)}
-          placeholder="Aapka naam"
+          placeholder="Your name"
         />
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
@@ -135,7 +135,7 @@ export default function ProfilePage() {
             rows={3}
             value={bio}
             onChange={e => setBio(e.target.value)}
-            placeholder="Apne baare mein kuch likhein..."
+            placeholder="Write something about yourself..."
             className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </div>
@@ -146,14 +146,14 @@ export default function ProfilePage() {
             disabled
             className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 text-gray-400 cursor-not-allowed"
           />
-          <p className="text-xs text-gray-400 mt-1">Email change nahi ho sakti</p>
+          <p className="text-xs text-gray-400 mt-1">Email cannot be changed</p>
         </div>
 
         {error && <p className="text-sm text-red-500">{error}</p>}
-        {success && <p className="text-sm text-green-600 font-medium">Profile save ho gayi!</p>}
+        {success && <p className="text-sm text-green-600 font-medium">Profile saved!</p>}
 
         <Button type="submit" loading={saving} className="w-full" size="lg">
-          <Save size={16} /> Profile Save Karein
+          <Save size={16} /> Save Profile
         </Button>
       </form>
 
@@ -161,8 +161,8 @@ export default function ProfilePage() {
       <div className="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-medium text-gray-800 text-sm">Password Change Karein</p>
-            <p className="text-xs text-gray-500 mt-0.5">Email pe reset link bheja jayega</p>
+            <p className="font-medium text-gray-800 text-sm">Change Password</p>
+            <p className="text-xs text-gray-500 mt-0.5">A reset link will be sent to your email</p>
           </div>
           <Link href="/forgot-password">
             <Button variant="outline" size="sm">

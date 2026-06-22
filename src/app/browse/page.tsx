@@ -37,7 +37,7 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
             <input
               name="q"
               defaultValue={params.q}
-              placeholder="Design search karein..."
+              placeholder="Search designs..."
               className="w-full pl-9 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
@@ -49,7 +49,7 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
         {/* Type Filter */}
         <div className="flex items-center gap-2 flex-wrap">
           {[
-            { label: 'Sab', value: '' },
+            { label: 'All', value: '' },
             { label: 'Free', value: 'free' },
             { label: 'Premium', value: 'premium' },
           ].map(f => (
@@ -78,7 +78,7 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
 
       {/* Results */}
       <div className="mb-4 text-sm text-gray-500">
-        {designs?.length ?? 0} designs mile
+        {designs?.length ?? 0} designs found
       </div>
       {designs && designs.length > 0 ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -87,7 +87,7 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
       ) : (
         <div className="text-center py-20 text-gray-400">
           <Search className="w-10 h-10 mx-auto mb-3" />
-          <p>Koi design nahi mila. Filter change karke dekhein.</p>
+          <p>No designs found. Try changing the filters.</p>
         </div>
       )}
     </div>

@@ -147,24 +147,24 @@ export default async function DesignDetailPage({ params }: Props) {
               <div className="space-y-3">
                 <div className="text-center">
                   <p className="text-2xl font-bold text-gray-900">{formatPrice(design.price ?? 0)}</p>
-                  <p className="text-xs text-gray-500 mt-1">ya subscription se free mein</p>
+                  <p className="text-xs text-gray-500 mt-1">or free with a subscription</p>
                 </div>
                 {user ? (
                   <>
                     <DownloadButton designId={design.id} designType="premium" isLoggedIn price={design.price ?? 0} />
                     <div className="relative">
                       <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200" /></div>
-                      <div className="relative flex justify-center"><span className="px-2 bg-white text-xs text-gray-400">ya</span></div>
+                      <div className="relative flex justify-center"><span className="px-2 bg-white text-xs text-gray-400">or</span></div>
                     </div>
                     <Link href="/pricing">
-                      <Button variant="outline" className="w-full">Subscription Lein — ₹99/month</Button>
+                      <Button variant="outline" className="w-full">Get Subscription — ₹99/month</Button>
                     </Link>
                   </>
                 ) : (
                   <>
-                    <Link href="/login"><Button className="w-full">Login Karke Download Karein</Button></Link>
+                    <Link href="/login"><Button className="w-full">Login to Download</Button></Link>
                     <Link href="/pricing">
-                      <Button variant="outline" className="w-full">Plans Dekhein</Button>
+                      <Button variant="outline" className="w-full">View Plans</Button>
                     </Link>
                   </>
                 )}

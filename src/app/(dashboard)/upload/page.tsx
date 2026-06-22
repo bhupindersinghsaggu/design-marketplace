@@ -52,7 +52,7 @@ export default function UploadPage() {
 
     try {
       // Step 1: Create design + get presigned URLs
-      setProgress('Design record ban raha hai...')
+      setProgress('Creating design record...')
       const title = (form.elements.namedItem('title') as HTMLInputElement).value
       const description = (form.elements.namedItem('description') as HTMLTextAreaElement).value
       const category_id = (form.elements.namedItem('category_id') as HTMLSelectElement).value
@@ -76,7 +76,7 @@ export default function UploadPage() {
 
       // Step 2: Upload preview directly to R2
       if (preview && previewUpload) {
-        setProgress('Preview upload ho rahi hai...')
+        setProgress('Uploading preview...')
         await uploadFileToR2(previewUpload.url, preview)
       }
 
@@ -85,7 +85,7 @@ export default function UploadPage() {
         const fu = fileUploads[i]
         const file = files.find(f => f.name === fu.name)
         if (!file) continue
-        setProgress(`File upload ho rahi hai (${i + 1}/${fileUploads.length}): ${fu.name}`)
+        setProgress(`Uploading file (${i + 1}/${fileUploads.length}): ${fu.name}`)
         await uploadFileToR2(fu.url, file, fu.type)
       }
 
@@ -105,7 +105,7 @@ export default function UploadPage() {
 
       setSuccess(true)
     } catch {
-      setError('Upload fail hua, dobara try karein')
+      setError('Upload failed, please try again')
     }
 
     setLoading(false)
@@ -118,10 +118,10 @@ export default function UploadPage() {
         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <Upload className="w-8 h-8 text-green-600" />
         </div>
-        <h2 className="text-xl font-bold text-gray-900">Design Upload Ho Gaya!</h2>
-        <p className="text-gray-500 mt-2">Admin review ke baad aapka design live ho jayega.</p>
+        <h2 className="text-xl font-bold text-gray-900">Design Uploaded!</h2>
+        <p className="text-gray-500 mt-2">Your design will go live after admin review.</p>
         <Button className="mt-6" onClick={() => { setSuccess(false); setFiles([]); setPreview(null); setPreviewUrl('') }}>
-          Aur Upload Karein
+          Upload Another
         </Button>
       </div>
     )
@@ -129,21 +129,21 @@ export default function UploadPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10">
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">Design Upload Karein</h1>
-      <p className="text-gray-500 mb-8">Upload ke baad admin review karega, phir live hoga.</p>
+      <h1 className="text-2xl font-bold text-gray-900 mb-2">Upload Design</h1>
+      <p className="text-gray-500 mb-8">After uploading, admin will review it before it goes live.</p>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <Input label="Design ka Title *" name="title" placeholder="e.g. Business Card Template" required />
+        <Input label="Design Title *" name="title" placeholder="e.g. Business Card Template" required />
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-          <textarea name="description" rows={3} placeholder="Design ke baare mein bataaiye..."
+          <textarea name="description" rows={3} placeholder="Describe your design..."
             className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
           <select name="category_id" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            <option value="">Category select karein</option>
+            <option value="">Select a category</option>
             {categories.map(c => <option key={c.id} value={c.id}>{c.icon} {c.name}</option>)}
           </select>
         </div>
@@ -166,7 +166,7 @@ export default function UploadPage() {
           <Input label="Price (₹) *" name="price" type="number" min="1" placeholder="e.g. 99" required />
         )}
 
-        <Input label="Tags (comma se separate karein)" name="tags" placeholder="e.g. logo, modern, business" />
+        <Input label="Tags (comma separated)" name="tags" placeholder="e.g. logo, modern, business" />
 
         {/* Preview Upload */}
         <div>
@@ -177,7 +177,7 @@ export default function UploadPage() {
             ) : (
               <div className="text-center text-gray-400">
                 <FileUp className="w-8 h-8 mx-auto mb-2" />
-                <span className="text-sm">Preview image click karke choose karein</span>
+                <span className="text-sm">Click to choose a preview image</span>
               </div>
             )}
             <input type="file" accept="image/*" className="sr-only" onChange={handlePreview} required />
@@ -191,7 +191,7 @@ export default function UploadPage() {
           </label>
           <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-indigo-400 hover:bg-indigo-50 transition-colors">
             <FileUp className="w-6 h-6 text-gray-400 mb-2" />
-            <span className="text-sm text-gray-500">Files choose karein (multiple select kar sakte hain)</span>
+            <span className="text-sm text-gray-500">Choose files (you can select multiple)</span>
             <input type="file" multiple accept=".cdr,.svg,.psd,.ai,.png,.jpg,.jpeg,.zip" className="sr-only" onChange={handleFiles} required />
           </label>
           {files.length > 0 && (
@@ -219,7 +219,7 @@ export default function UploadPage() {
         )}
         {error && <p className="text-sm text-red-500">{error}</p>}
         <Button type="submit" loading={loading} size="lg" className="w-full">
-          <Upload size={16} /> Design Upload Karein
+          <Upload size={16} /> Upload Design
         </Button>
       </form>
     </div>

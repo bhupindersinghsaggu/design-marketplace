@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'DesignMarket — Free & Premium Design Resources',
-  description: 'CDR, SVG, PSD, AI files download karein. Apne designs upload karein aur paise kamaiye.',
+  description: 'Download CDR, SVG, PSD, AI files. Upload your designs and earn money.',
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -24,7 +24,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <html lang="hi">
+    <html lang="en">
       <body className={inter.className}>
         <Navbar profile={profile} />
         <main>{children}</main>

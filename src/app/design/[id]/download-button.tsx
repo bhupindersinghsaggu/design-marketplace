@@ -69,14 +69,14 @@ export function DownloadButton({ designId, designType, isLoggedIn, hasAccess, pr
   if (designType === 'free' || hasAccess) {
     return (
       <Button onClick={handleDownload} loading={loading} className="w-full" size="lg">
-        <Download size={16} /> {isLoggedIn ? 'Download Karein' : 'Login Karke Download Karein'}
+        <Download size={16} /> {isLoggedIn ? 'Download' : 'Login to Download'}
       </Button>
     )
   }
 
   return (
     <Button onClick={handlePurchase} loading={loading} className="w-full" size="lg">
-      <Download size={16} /> {formatPrice(price ?? 0)} mein Kharidein
+      <Download size={16} /> Buy for {formatPrice(price ?? 0)}
     </Button>
   )
 }

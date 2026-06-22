@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   const { data: plan } = await supabase
     .from('subscription_plans').select('*').eq('id', plan_id).single()
 
-  if (!plan) return NextResponse.json({ error: 'Plan nahi mila' }, { status: 404 })
+  if (!plan) return NextResponse.json({ error: 'Plan not found' }, { status: 404 })
 
   const now = new Date()
   const periodEnd = new Date(now)

@@ -20,7 +20,7 @@ export function SettleMonthButton() {
   return (
     <div className="flex items-center gap-3">
       {msg && <span className="text-sm text-gray-600">{msg}</span>}
-      <Button size="sm" onClick={settle} loading={loading}>Monthly Settle Karein</Button>
+      <Button size="sm" onClick={settle} loading={loading}>Settle Month</Button>
     </div>
   )
 }

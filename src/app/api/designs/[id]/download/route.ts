@@ -7,7 +7,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: 'Login zaroori hai' }, { status: 401 })
+  if (!user) return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
 
   const { data: design } = await supabase
     .from('designs')
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     .eq('status', 'approved')
     .single()
 
-  if (!design) return NextResponse.json({ error: 'Design nahi mila' }, { status: 404 })
+  if (!design) return NextResponse.json({ error: 'Design not found' }, { status: 404 })
 
   // Check access for premium
   if (design.type === 'premium') {
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       .gte('current_period_end', new Date().toISOString()).single()
 
     if (!purchase && !sub) {
-      return NextResponse.json({ error: 'Yeh design premium hai. Pehle kharidein ya subscription lein.' }, { status: 403 })
+      return NextResponse.json({ error: 'This is a premium design. Please purchase it or get a subscription.' }, { status: 403 })
     }
   }
 
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const files = design.files ?? []
   const file = fileOrder.map(t => files.find((f: { file_type: string }) => f.file_type === t)).find(Boolean) ?? files[0]
 
-  if (!file) return NextResponse.json({ error: 'File nahi mili' }, { status: 404 })
+  if (!file) return NextResponse.json({ error: 'File not found' }, { status: 404 })
 
   // Record download
   await supabase.from('downloads').insert({

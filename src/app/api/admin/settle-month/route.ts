@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
   // Check if already settled
   const { data: existing } = await supabase
     .from('monthly_settlements').select('*').eq('month', month).single()
-  if (existing?.settled) return NextResponse.json({ error: `${month} pehle se settle ho chuka hai` }, { status: 400 })
+  if (existing?.settled) return NextResponse.json({ error: `${month} has already been settled` }, { status: 400 })
 
   // Total subscription revenue for last month
   const monthStart = new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 1).toISOString()
@@ -95,6 +95,6 @@ export async function POST(req: NextRequest) {
   }
 
   return NextResponse.json({
-    message: `${month} settle ho gaya! Creator pool: ₹${creatorPool.toFixed(2)}, Downloads: ${totalDownloads}`
+    message: `${month} settled successfully! Creator pool: ₹${creatorPool.toFixed(2)}, Downloads: ${totalDownloads}`
   })
 }

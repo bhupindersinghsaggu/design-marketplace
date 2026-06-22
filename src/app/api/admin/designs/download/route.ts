@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   if (profile?.role !== 'admin') return NextResponse.json({ error: 'Admin only' }, { status: 403 })
 
   const { file_key, file_name } = await req.json()
-  if (!file_key) return NextResponse.json({ error: 'file_key zaroori hai' }, { status: 400 })
+  if (!file_key) return NextResponse.json({ error: 'file_key is required' }, { status: 400 })
 
   const url = await getPresignedDownloadUrl(file_key)
   return NextResponse.json({ url, file_name })

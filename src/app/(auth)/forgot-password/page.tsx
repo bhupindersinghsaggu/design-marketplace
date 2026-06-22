@@ -33,10 +33,10 @@ export default function ForgotPasswordPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
-          <h2 className="text-xl font-bold text-gray-900">Email Bhej Di!</h2>
-          <p className="text-gray-500 mt-2">{email} pe password reset link bheja gaya hai. Email check karein.</p>
+          <h2 className="text-xl font-bold text-gray-900">Email Sent!</h2>
+          <p className="text-gray-500 mt-2">A password reset link has been sent to {email}. Please check your email.</p>
           <Link href="/login" className="mt-4 inline-block text-indigo-600 font-medium hover:underline">
-            Login pe wapis jaaiye
+            Back to Login
           </Link>
         </div>
       </div>
@@ -47,19 +47,19 @@ export default function ForgotPasswordPage() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Password Reset Karein</h1>
-          <p className="text-gray-500 mt-1">Email daalen, reset link bhej denge</p>
+          <h1 className="text-2xl font-bold text-gray-900">Reset Your Password</h1>
+          <p className="text-gray-500 mt-1">Enter your email and we&apos;ll send you a reset link</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input label="Email" id="email" type="email" placeholder="aap@example.com"
             value={email} onChange={e => setEmail(e.target.value)} required />
           {error && <p className="text-sm text-red-500 text-center">{error}</p>}
           <Button type="submit" loading={loading} className="w-full" size="lg">
-            Reset Link Bhejein
+            Send Reset Link
           </Button>
         </form>
         <p className="text-center text-sm text-gray-500 mt-6">
-          <Link href="/login" className="text-indigo-600 font-medium hover:underline">Login pe wapis jaaiye</Link>
+          <Link href="/login" className="text-indigo-600 font-medium hover:underline">Back to Login</Link>
         </p>
       </div>
     </div>

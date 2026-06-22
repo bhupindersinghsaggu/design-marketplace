@@ -7,12 +7,12 @@ export const ALLOWED_EXTENSIONS = ['cdr', 'svg', 'psd', 'ai', 'png', 'jpg', 'jpe
 export async function POST(req: NextRequest) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: 'Login zaroori hai' }, { status: 401 })
+  if (!user) return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
 
   const body = await req.json()
   const { title, description, category_id, type, price, tags, previewName, previewType, files } = body
 
-  if (!title) return NextResponse.json({ error: 'Title zaroori hai' }, { status: 400 })
+  if (!title) return NextResponse.json({ error: 'Title is required' }, { status: 400 })
 
   const price_val = type === 'premium' ? Number(price) : 0
   const tags_val: string[] = typeof tags === 'string'
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     .select()
     .single()
 
-  if (designError || !design) return NextResponse.json({ error: 'Design save nahi hua' }, { status: 500 })
+  if (designError || !design) return NextResponse.json({ error: 'Failed to save design' }, { status: 500 })
 
   // Presigned URL for preview
   let previewUpload: { url: string; key: string } | null = null

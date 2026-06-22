@@ -27,17 +27,17 @@ export default async function HomePage() {
             Free & Premium<br />Design Resources
           </h1>
           <p className="text-indigo-200 text-lg md:text-xl mb-8 max-w-2xl mx-auto">
-            CDR, SVG, PSD, AI files download karein. Apne designs share karein aur paise kamaiye.
+            Download CDR, SVG, PSD, AI files. Share your designs and earn money.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/browse">
               <Button size="lg" className="bg-white text-indigo-700 hover:bg-indigo-50 w-full sm:w-auto">
-                Designs Browse Karein <ArrowRight size={16} />
+                Browse Designs <ArrowRight size={16} />
               </Button>
             </Link>
             <Link href="/register">
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 w-full sm:w-auto">
-                Free Join Karein
+                Join for Free
               </Button>
             </Link>
           </div>
@@ -78,7 +78,7 @@ export default async function HomePage() {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900">Latest Designs</h2>
           <Link href="/browse" className="text-sm text-indigo-600 hover:underline flex items-center gap-1">
-            Sab Dekhein <ArrowRight size={14} />
+            View All <ArrowRight size={14} />
           </Link>
         </div>
         {designs && designs.length > 0 ? (
@@ -87,8 +87,8 @@ export default async function HomePage() {
           </div>
         ) : (
           <div className="text-center py-16 text-gray-500">
-            <p>Abhi koi design nahi hai. Pehle upload karein!</p>
-            <Link href="/upload" className="mt-2 inline-block text-indigo-600 hover:underline">Design Upload Karein</Link>
+            <p>No designs yet. Be the first to upload!</p>
+            <Link href="/upload" className="mt-2 inline-block text-indigo-600 hover:underline">Upload a Design</Link>
           </div>
         )}
       </section>
@@ -96,11 +96,11 @@ export default async function HomePage() {
       {/* CTA - Upload */}
       <section className="bg-indigo-50 border-t border-indigo-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">Creator Banaiye, Paise Kamaiye</h2>
-          <p className="text-gray-600 mb-6">Apne designs upload karein — har sale pe 70% commission milega</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">Become a Creator, Earn Money</h2>
+          <p className="text-gray-600 mb-6">Upload your designs — earn 70% commission on every sale</p>
           <Link href="/register">
             <Button size="lg">
-              <Upload size={16} /> Abhi Shuru Karein
+              <Upload size={16} /> Get Started Now
             </Button>
           </Link>
         </div>

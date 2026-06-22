@@ -17,10 +17,10 @@ export function WithdrawButton({ availableBalance, profile }: Props) {
 
   async function handleWithdraw() {
     const amt = Number(amount)
-    if (!amt || amt < 100) { setMessage('Minimum ₹100 withdraw kar sakte hain'); return }
-    if (amt > availableBalance) { setMessage('Itna balance nahi hai'); return }
+    if (!amt || amt < 100) { setMessage('Minimum withdrawal amount is ₹100'); return }
+    if (amt > availableBalance) { setMessage('Insufficient balance'); return }
     if (!profile?.upi_id && !profile?.bank_account) {
-      setMessage('Pehle UPI ya bank details dashboard mein add karein'); return
+      setMessage('Please add your UPI or bank details in the dashboard first'); return
     }
     setLoading(true)
     const res = await fetch('/api/payments/withdraw', {
@@ -30,12 +30,12 @@ export function WithdrawButton({ availableBalance, profile }: Props) {
     })
     const data = await res.json()
     setLoading(false)
-    setMessage(data.error ?? 'Withdrawal request submit ho gaya! Processing mein 1-2 din lagenge.')
+    setMessage(data.error ?? 'Withdrawal request submitted! Processing takes 1-2 business days.')
     if (!data.error) setAmount('')
   }
 
   if (availableBalance < 100) {
-    return <p className="text-sm text-gray-400">Minimum ₹100 chahiye withdrawal ke liye. Abhi balance: {formatPrice(availableBalance)}</p>
+    return <p className="text-sm text-gray-400">Minimum ₹100 required to withdraw. Current balance: {formatPrice(availableBalance)}</p>
   }
 
   return (
@@ -50,7 +50,7 @@ export function WithdrawButton({ availableBalance, profile }: Props) {
       />
       {message && <p className="text-xs text-gray-600">{message}</p>}
       <Button onClick={handleWithdraw} loading={loading} className="w-full">
-        Withdraw Request Karein
+        Request Withdrawal
       </Button>
     </div>
   )

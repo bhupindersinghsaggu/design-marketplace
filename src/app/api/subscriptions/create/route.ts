@@ -9,21 +9,21 @@ export async function POST(req: NextRequest) {
   })
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: 'Login zaroori hai' }, { status: 401 })
+  if (!user) return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
 
   const { plan_id } = await req.json()
 
   const { data: plan } = await supabase
     .from('subscription_plans').select('*').eq('id', plan_id).eq('is_active', true).single()
 
-  if (!plan) return NextResponse.json({ error: 'Plan nahi mila' }, { status: 404 })
+  if (!plan) return NextResponse.json({ error: 'Plan not found' }, { status: 404 })
 
   // Check existing active subscription
   const { data: existing } = await supabase
     .from('user_subscriptions').select('id').eq('user_id', user.id).eq('status', 'active')
     .gte('current_period_end', new Date().toISOString()).single()
 
-  if (existing) return NextResponse.json({ error: 'Aapke paas pehle se active subscription hai' }, { status: 400 })
+  if (existing) return NextResponse.json({ error: 'You already have an active subscription' }, { status: 400 })
 
   // If plan has Razorpay plan ID, create subscription
   if (plan.razorpay_plan_id) {

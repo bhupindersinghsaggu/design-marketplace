@@ -18,12 +18,12 @@ export async function POST(req: NextRequest) {
     .digest('hex')
 
   if (expectedSignature !== razorpay_signature)
-    return NextResponse.json({ error: 'Payment verify nahi hua' }, { status: 400 })
+    return NextResponse.json({ error: 'Payment verification failed' }, { status: 400 })
 
   const { data: design } = await supabase
     .from('designs').select('id, price, creator_id').eq('id', design_id).single()
 
-  if (!design) return NextResponse.json({ error: 'Design nahi mila' }, { status: 404 })
+  if (!design) return NextResponse.json({ error: 'Design not found' }, { status: 404 })
 
   const amount = design.price ?? 0
   const platformFee = amount * PLATFORM_COMMISSION
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     razorpay_payment_id,
   })
 
-  if (error) return NextResponse.json({ error: 'Purchase save nahi hua' }, { status: 500 })
+  if (error) return NextResponse.json({ error: 'Failed to save purchase' }, { status: 500 })
 
   // Credit creator earnings
   await supabase.from('earnings').insert({

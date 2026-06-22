@@ -10,8 +10,8 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 const schema = z.object({
-  email: z.string().email('Valid email daalen'),
-  password: z.string().min(6, 'Password kam se kam 6 characters ka hona chahiye'),
+  email: z.string().email('Please enter a valid email'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
 })
 type FormData = z.infer<typeof schema>
 
@@ -35,8 +35,8 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Wapas aaiye!</h1>
-          <p className="text-gray-500 mt-1">Apne account mein login karein</p>
+          <h1 className="text-2xl font-bold text-gray-900">Welcome back!</h1>
+          <p className="text-gray-500 mt-1">Sign in to your account</p>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Input label="Email" id="email" type="email" placeholder="aap@example.com"
@@ -45,15 +45,15 @@ export default function LoginPage() {
             error={errors.password?.message} {...register('password')} />
           {error && <p className="text-sm text-red-500 text-center">{error}</p>}
           <Button type="submit" loading={isSubmitting} className="w-full" size="lg">
-            Login Karein
+            Sign In
           </Button>
         </form>
         <p className="text-center text-sm text-gray-500 mt-4">
-          <Link href="/forgot-password" className="text-indigo-600 font-medium hover:underline">Password bhool gaye?</Link>
+          <Link href="/forgot-password" className="text-indigo-600 font-medium hover:underline">Forgot your password?</Link>
         </p>
         <p className="text-center text-sm text-gray-500 mt-3">
-          Account nahi hai?{' '}
-          <Link href="/register" className="text-indigo-600 font-medium hover:underline">Register Karein</Link>
+          Don&apos;t have an account?{' '}
+          <Link href="/register" className="text-indigo-600 font-medium hover:underline">Sign Up</Link>
         </p>
       </div>
     </div>

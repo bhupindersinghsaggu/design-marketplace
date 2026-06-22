@@ -58,7 +58,7 @@ export default async function AdminPayoutsPage() {
                 </tr>
               ))}
               {(!settlements || settlements.length === 0) && (
-                <tr><td colSpan={5} className="px-3 py-4 text-center text-gray-400">Koi settlement nahi hai</td></tr>
+                <tr><td colSpan={5} className="px-3 py-4 text-center text-gray-400">No settlements yet</td></tr>
               )}
             </tbody>
           </table>
@@ -70,7 +70,7 @@ export default async function AdminPayoutsPage() {
         Pending Withdrawals <span className="ml-2 px-2 py-0.5 bg-yellow-100 text-yellow-700 text-sm rounded-full">{pending.length}</span>
       </h2>
       <div className="space-y-4 mb-8">
-        {pending.length === 0 && <p className="text-gray-400 text-sm">Koi pending withdrawal nahi hai</p>}
+        {pending.length === 0 && <p className="text-gray-400 text-sm">No pending withdrawals</p>}
         {pending.map(w => (
           <div key={w.id} className="bg-white border border-gray-200 rounded-xl p-5 flex items-center justify-between gap-4">
             <div>

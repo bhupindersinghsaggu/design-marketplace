@@ -10,12 +10,12 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 const schema = z.object({
-  full_name: z.string().min(2, 'Naam kam se kam 2 characters ka hona chahiye'),
-  email: z.string().email('Valid email daalen'),
-  password: z.string().min(6, 'Password kam se kam 6 characters ka hona chahiye'),
+  full_name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Please enter a valid email'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
   confirm_password: z.string(),
 }).refine(d => d.password === d.confirm_password, {
-  message: 'Passwords match nahi kar rahe',
+  message: 'Passwords do not match',
   path: ['confirm_password'],
 })
 type FormData = z.infer<typeof schema>
@@ -49,10 +49,10 @@ export default function RegisterPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-xl font-bold text-gray-900">Email verify karein!</h2>
-          <p className="text-gray-500 mt-2">Aapke email pe confirmation link bheja gaya hai.</p>
+          <h2 className="text-xl font-bold text-gray-900">Check your email!</h2>
+          <p className="text-gray-500 mt-2">A confirmation link has been sent to your email.</p>
           <Link href="/login" className="mt-4 inline-block text-indigo-600 font-medium hover:underline">
-            Login pe jaaiye
+            Go to Login
           </Link>
         </div>
       </div>
@@ -63,26 +63,26 @@ export default function RegisterPage() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Account Banaaiye</h1>
-          <p className="text-gray-500 mt-1">Free mein join karein, designs download karein</p>
+          <h1 className="text-2xl font-bold text-gray-900">Create an Account</h1>
+          <p className="text-gray-500 mt-1">Join for free and start downloading designs</p>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <Input label="Pura Naam" id="full_name" placeholder="Aapka naam"
+          <Input label="Full Name" id="full_name" placeholder="Your name"
             error={errors.full_name?.message} {...register('full_name')} />
           <Input label="Email" id="email" type="email" placeholder="aap@example.com"
             error={errors.email?.message} {...register('email')} />
           <Input label="Password" id="password" type="password" placeholder="••••••••"
             error={errors.password?.message} {...register('password')} />
-          <Input label="Password Confirm Karein" id="confirm_password" type="password" placeholder="••••••••"
+          <Input label="Confirm Password" id="confirm_password" type="password" placeholder="••••••••"
             error={errors.confirm_password?.message} {...register('confirm_password')} />
           {error && <p className="text-sm text-red-500 text-center">{error}</p>}
           <Button type="submit" loading={isSubmitting} className="w-full" size="lg">
-            Register Karein
+            Sign Up
           </Button>
         </form>
         <p className="text-center text-sm text-gray-500 mt-6">
-          Pehle se account hai?{' '}
-          <Link href="/login" className="text-indigo-600 font-medium hover:underline">Login Karein</Link>
+          Already have an account?{' '}
+          <Link href="/login" className="text-indigo-600 font-medium hover:underline">Sign In</Link>
         </p>
       </div>
     </div>

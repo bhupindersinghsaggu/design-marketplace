@@ -73,7 +73,7 @@ export function Navbar({ profile }: NavbarProps) {
                     </Link>
                     <Link href="/profile" onClick={() => setMenuOpen(false)}
                       className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                      <UserCircle size={15} /> Meri Profile
+                      <UserCircle size={15} /> My Profile
                     </Link>
                     <Link href="/upload" onClick={() => setMenuOpen(false)}
                       className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">

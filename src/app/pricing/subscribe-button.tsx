@@ -67,7 +67,7 @@ export function SubscribeButton({ planId, planName, price, isActive, isLoggedIn,
       variant={isPro ? 'primary' : 'outline'}
       size="lg"
     >
-      {isLoggedIn ? 'Subscribe Karein' : 'Login Karke Subscribe Karein'}
+      {isLoggedIn ? 'Subscribe' : 'Login to Subscribe'}
     </Button>
   )
 }

@@ -26,7 +26,7 @@ export default async function AdminDesignsPage() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold text-gray-900">Admin — Designs</h1>
-        <a href="/admin/payouts" className="text-sm text-indigo-600 hover:underline">Payouts Dekhein →</a>
+        <a href="/admin/payouts" className="text-sm text-indigo-600 hover:underline">View Payouts →</a>
       </div>
 
       {/* Pending */}
@@ -34,7 +34,7 @@ export default async function AdminDesignsPage() {
         Pending Review <span className="ml-2 px-2 py-0.5 bg-yellow-100 text-yellow-700 text-sm rounded-full">{pending.length}</span>
       </h2>
       <div className="space-y-4 mb-10">
-        {pending.length === 0 && <p className="text-gray-400 text-sm">Koi pending design nahi hai</p>}
+        {pending.length === 0 && <p className="text-gray-400 text-sm">No pending designs</p>}
         {pending.map(d => (
           <div key={d.id} className="bg-white border border-gray-200 rounded-xl p-5 flex gap-5">
             <div className="w-24 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
@@ -70,7 +70,7 @@ export default async function AdminDesignsPage() {
       </div>
 
       {/* All other designs */}
-      <h2 className="text-lg font-semibold text-gray-800 mb-4">Sab Designs ({others.length})</h2>
+      <h2 className="text-lg font-semibold text-gray-800 mb-4">All Designs ({others.length})</h2>
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 border-b border-gray-200">

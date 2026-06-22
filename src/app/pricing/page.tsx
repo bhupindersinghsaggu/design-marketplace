@@ -25,12 +25,12 @@ export default async function PricingPage() {
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="text-center mb-12">
         <h1 className="text-3xl font-bold text-gray-900">Subscription Plans</h1>
-        <p className="text-gray-500 mt-3">Saare premium designs unlimited download karein</p>
+        <p className="text-gray-500 mt-3">Unlimited downloads of all premium designs</p>
         {activeSub && (
           <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-full">
             <Check size={14} className="text-green-600" />
             <span className="text-sm text-green-700 font-medium">
-              Active: {activeSub.plan?.name} — {new Date(activeSub.current_period_end).toLocaleDateString('en-IN')} tak
+              Active: {activeSub.plan?.name} — valid until {new Date(activeSub.current_period_end).toLocaleDateString('en-IN')}
             </span>
           </div>
         )}

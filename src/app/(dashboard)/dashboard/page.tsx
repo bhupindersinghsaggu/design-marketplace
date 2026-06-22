@@ -39,7 +39,7 @@ export default async function DashboardPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500 mt-1">Namaste, {profile?.full_name ?? 'Creator'}!</p>
+          <p className="text-gray-500 mt-1">Hello, {profile?.full_name ?? 'Creator'}!</p>
         </div>
         <Link href="/upload"
           className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700">
@@ -50,7 +50,7 @@ export default async function DashboardPage() {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {[
-          { icon: Wallet, label: 'Total Kamaaye', value: formatPrice(totalEarnings), color: 'text-green-600' },
+          { icon: Wallet, label: 'Total Earned', value: formatPrice(totalEarnings), color: 'text-green-600' },
           { icon: TrendingUp, label: 'Available Balance', value: formatPrice(availableBalance), color: 'text-indigo-600' },
           { icon: Package, label: 'Total Designs', value: designs?.length ?? 0, color: 'text-gray-700' },
           { icon: Download, label: 'Total Downloads', value: totalDownloads, color: 'text-gray-700' },
@@ -77,7 +77,7 @@ export default async function DashboardPage() {
       <div className="grid md:grid-cols-2 gap-8">
         {/* My Designs */}
         <div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Mere Designs</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">My Designs</h2>
           <div className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
             {designs && designs.length > 0 ? designs.map(d => (
               <div key={d.id} className="flex items-center justify-between p-4">
@@ -94,7 +94,7 @@ export default async function DashboardPage() {
                 <div className="ml-3">{statusBadge(d.status)}</div>
               </div>
             )) : (
-              <div className="p-8 text-center text-gray-400 text-sm">Abhi koi design nahi hai</div>
+              <div className="p-8 text-center text-gray-400 text-sm">No designs yet</div>
             )}
           </div>
         </div>
@@ -103,7 +103,7 @@ export default async function DashboardPage() {
         <div className="space-y-6">
           {/* Withdraw */}
           <div className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-lg font-semibold text-gray-900 mb-1">Paise Nikaalein</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-1">Withdraw Funds</h2>
             <p className="text-sm text-gray-500 mb-4">Available: <strong className="text-green-600">{formatPrice(availableBalance)}</strong></p>
             <WithdrawButton availableBalance={availableBalance} profile={profile} />
           </div>
@@ -121,7 +121,7 @@ export default async function DashboardPage() {
                   <span className="text-sm font-semibold text-green-600">+{formatPrice(e.amount)}</span>
                 </div>
               )) : (
-                <p className="text-sm text-gray-400">Abhi koi earning nahi hai</p>
+                <p className="text-sm text-gray-400">No earnings yet</p>
               )}
             </div>
           </div>
