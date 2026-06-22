@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { TrendingUp, Download, Package, Wallet } from 'lucide-react'
 import Link from 'next/link'
 import { WithdrawButton } from './withdraw-button'
+import { DeleteDesignButton } from './delete-design-button'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -91,7 +92,10 @@ export default async function DashboardPage() {
                     <span className="text-xs text-gray-400"><Download size={10} className="inline mr-1" />{d.downloads_count}</span>
                   </div>
                 </div>
-                <div className="ml-3">{statusBadge(d.status)}</div>
+                <div className="ml-3 flex items-center gap-2">
+                  {statusBadge(d.status)}
+                  <DeleteDesignButton designId={d.id} title={d.title} />
+                </div>
               </div>
             )) : (
               <div className="p-8 text-center text-gray-400 text-sm">No designs yet</div>
