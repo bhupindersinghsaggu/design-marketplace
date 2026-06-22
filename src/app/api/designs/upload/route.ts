@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
 
   const body = await req.json()
-  const { title, description, category_id, type, price, tags, meta_title, meta_description, slug, previewName, previewType, files } = body
+  const { title, description, category_id, type, price, tags, meta_title, meta_description, slug, previewName, previewType, images, files } = body
 
   if (!title) return NextResponse.json({ error: 'Title is required' }, { status: 400 })
 
@@ -27,13 +27,23 @@ export async function POST(req: NextRequest) {
 
   if (designError || !design) return NextResponse.json({ error: 'Failed to save design' }, { status: 500 })
 
-  // Presigned URL for preview
+  // Presigned URL for first/main preview (backward compat)
   let previewUpload: { url: string; key: string } | null = null
   if (previewName) {
     const ext = previewName.split('.').pop() ?? 'png'
     const key = getFileKey(design.id, `preview.${ext}`, 'preview')
     const url = await getPresignedUploadUrl(key, previewType || 'image/png')
     previewUpload = { url, key }
+  }
+
+  // Presigned URLs for additional carousel images
+  const imageUploads: { url: string; key: string; name: string; type: string; order: number }[] = []
+  for (let i = 0; i < (images ?? []).length; i++) {
+    const img = images[i]
+    const ext = (img.name as string).split('.').pop()?.toLowerCase() ?? 'jpg'
+    const key = `previews/${design.id}/image_${i}.${ext}`
+    const url = await getPresignedUploadUrl(key, img.type || 'image/jpeg')
+    imageUploads.push({ url, key, name: img.name, type: img.type, order: i })
   }
 
   // Presigned URLs for design files
@@ -47,5 +57,5 @@ export async function POST(req: NextRequest) {
     fileUploads.push({ url, key, name: f.name, type: mimeType, size: f.size })
   }
 
-  return NextResponse.json({ design_id: design.id, previewUpload, fileUploads })
+  return NextResponse.json({ design_id: design.id, previewUpload, imageUploads, fileUploads })
 }

@@ -21,11 +21,21 @@ export async function POST(req: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const { design_id, preview_key, files } = await req.json()
+  const { design_id, preview_key, images, files } = await req.json()
 
   if (preview_key) {
     const preview_url = `${process.env.R2_PUBLIC_URL}/${preview_key}`
     await supabase.from('designs').update({ preview_url }).eq('id', design_id).eq('creator_id', user.id)
+  }
+
+  // Save carousel images
+  for (const img of (images ?? [])) {
+    await supabase.from('design_images').insert({
+      design_id,
+      image_url: `${process.env.R2_PUBLIC_URL}/${img.key}`,
+      image_key: img.key,
+      sort_order: img.order,
+    })
   }
 
   for (const f of (files ?? [])) {

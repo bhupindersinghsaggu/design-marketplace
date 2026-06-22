@@ -17,6 +17,8 @@ export default function UploadPage() {
   const [files, setFiles] = useState<File[]>([])
   const [preview, setPreview] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState('')
+  const [carouselImages, setCarouselImages] = useState<File[]>([])
+  const [carouselPreviews, setCarouselPreviews] = useState<string[]>([])
   const [progress, setProgress] = useState('')
   const [slug, setSlug] = useState('')
   const [titleVal, setTitleVal] = useState('')
@@ -77,21 +79,31 @@ export default function UploadPage() {
           title, description, category_id, type, price, tags, meta_title, meta_description, slug: slug || generateSlug(title),
           previewName: preview?.name,
           previewType: preview?.type,
+          images: carouselImages.map(f => ({ name: f.name, type: f.type })),
           files: files.map(f => ({ name: f.name, type: f.type, size: f.size })),
         }),
       })
       const data = await res.json()
       if (data.error) { setError(data.error); setLoading(false); return }
 
-      const { design_id, previewUpload, fileUploads } = data
+      const { design_id, previewUpload, imageUploads, fileUploads } = data
 
-      // Step 2: Upload preview directly to R2
+      // Step 2: Upload main preview
       if (preview && previewUpload) {
         setProgress('Uploading preview...')
         await uploadFileToR2(previewUpload.url, preview)
       }
 
-      // Step 3: Upload design files directly to R2
+      // Step 3: Upload carousel images
+      for (let i = 0; i < (imageUploads ?? []).length; i++) {
+        const iu = imageUploads[i]
+        const img = carouselImages[iu.order]
+        if (!img) continue
+        setProgress(`Uploading image (${i + 1}/${imageUploads.length})...`)
+        await uploadFileToR2(iu.url, img, iu.type)
+      }
+
+      // Step 4: Upload design files
       for (let i = 0; i < fileUploads.length; i++) {
         const fu = fileUploads[i]
         const file = files.find(f => f.name === fu.name)
@@ -100,7 +112,7 @@ export default function UploadPage() {
         await uploadFileToR2(fu.url, file, fu.type)
       }
 
-      // Step 4: Save file records in DB
+      // Step 5: Save records in DB
       setProgress('Finalizing...')
       await fetch('/api/designs/upload/complete', {
         method: 'POST',
@@ -108,6 +120,7 @@ export default function UploadPage() {
         body: JSON.stringify({
           design_id,
           preview_key: previewUpload?.key,
+          images: (imageUploads ?? []).map((iu: { key: string; order: number }) => ({ key: iu.key, order: iu.order })),
           files: fileUploads.map((fu: { key: string; name: string; type: string; size: number }) => ({
             key: fu.key, name: fu.name, type: fu.type, size: fu.size,
           })),
@@ -253,6 +266,38 @@ export default function UploadPage() {
             )}
             <input type="file" accept="image/*" className="sr-only" onChange={handlePreview} required />
           </label>
+        </div>
+
+        {/* Carousel Images */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Additional Images for Carousel <span className="text-gray-400 font-normal">(optional, max 8)</span>
+          </label>
+          <label className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-indigo-400 hover:bg-indigo-50 transition-colors">
+            <FileUp className="w-5 h-5 text-gray-400 mb-1" />
+            <span className="text-sm text-gray-500">Add more images (PNG/JPG)</span>
+            <input type="file" multiple accept="image/*" className="sr-only"
+              onChange={e => {
+                const selected = Array.from(e.target.files ?? []).slice(0, 8)
+                setCarouselImages(selected)
+                setCarouselPreviews(selected.map(f => URL.createObjectURL(f)))
+              }} />
+          </label>
+          {carouselPreviews.length > 0 && (
+            <div className="flex gap-2 mt-3 flex-wrap">
+              {carouselPreviews.map((url, i) => (
+                <div key={i} className="relative w-16 h-16 rounded-lg overflow-hidden border border-gray-200">
+                  <img src={url} alt="" className="w-full h-full object-cover" />
+                  <button type="button" onClick={() => {
+                    setCarouselImages(prev => prev.filter((_, j) => j !== i))
+                    setCarouselPreviews(prev => prev.filter((_, j) => j !== i))
+                  }} className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                    <X size={10} className="text-white" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Design Files */}

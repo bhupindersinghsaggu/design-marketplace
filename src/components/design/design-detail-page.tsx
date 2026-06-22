@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { formatDate, formatPrice, getFileTypeLabel, fileSizeLabel } from '@/lib/utils'
 import { Download, FileType, User, Calendar, Tag } from 'lucide-react'
 import Link from 'next/link'
-import Image from 'next/image'
+import { ImageCarousel } from '@/components/design/image-carousel'
 import { DownloadButton } from '@/app/design/[id]/download-button'
 
 export async function DesignDetailPage({ id }: { id: string }) {
@@ -13,7 +13,7 @@ export async function DesignDetailPage({ id }: { id: string }) {
 
   const { data: design } = await supabase
     .from('designs')
-    .select('*, creator:profiles(id, full_name, avatar_url, bio), category:categories(name, slug, icon), files:design_files(*)')
+    .select('*, creator:profiles(id, full_name, avatar_url, bio), category:categories(name, slug, icon), files:design_files(*), images:design_images(*)')
     .eq('id', id)
     .eq('status', 'approved')
     .single()
@@ -42,15 +42,17 @@ export async function DesignDetailPage({ id }: { id: string }) {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Preview */}
+        {/* Preview / Carousel */}
         <div className="lg:col-span-2">
-          <div className="bg-gray-100 rounded-2xl overflow-hidden aspect-[4/3] relative">
-            {design.preview_url ? (
-              <Image src={design.preview_url} alt={design.title} fill className="object-contain" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400">No Preview</div>
-            )}
-          </div>
+          <ImageCarousel
+            images={[
+              ...(design.preview_url ? [design.preview_url] : []),
+              ...(design.images ?? [])
+                .sort((a: { sort_order: number }, b: { sort_order: number }) => a.sort_order - b.sort_order)
+                .map((img: { image_url: string }) => img.image_url),
+            ]}
+            title={design.title}
+          />
 
           <div className="mt-6">
             <div className="flex items-start justify-between gap-4 flex-wrap">
