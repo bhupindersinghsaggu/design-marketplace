@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Profile } from '@/types'
-import { Upload, LayoutDashboard, LogOut, Shield, Search } from 'lucide-react'
+import { Upload, LayoutDashboard, LogOut, Shield, Search, UserCircle } from 'lucide-react'
 import { useState } from 'react'
 
 interface NavbarProps {
@@ -70,6 +70,10 @@ export function Navbar({ profile }: NavbarProps) {
                     <Link href="/dashboard" onClick={() => setMenuOpen(false)}
                       className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
                       <LayoutDashboard size={15} /> Dashboard
+                    </Link>
+                    <Link href="/profile" onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                      <UserCircle size={15} /> Meri Profile
                     </Link>
                     <Link href="/upload" onClick={() => setMenuOpen(false)}
                       className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">

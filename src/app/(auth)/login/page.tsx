@@ -48,7 +48,10 @@ export default function LoginPage() {
             Login Karein
           </Button>
         </form>
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-gray-500 mt-4">
+          <Link href="/forgot-password" className="text-indigo-600 font-medium hover:underline">Password bhool gaye?</Link>
+        </p>
+        <p className="text-center text-sm text-gray-500 mt-3">
           Account nahi hai?{' '}
           <Link href="/register" className="text-indigo-600 font-medium hover:underline">Register Karein</Link>
         </p>
