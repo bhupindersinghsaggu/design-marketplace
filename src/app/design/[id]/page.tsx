@@ -16,15 +16,15 @@ export async function generateMetadata({ params }: Props) {
   const supabase = await createClient()
   const { data: design } = await supabase
     .from('designs')
-    .select('title, description, preview_url, type, price, category:categories(name), creator:profiles(full_name)')
+    .select('title, description, preview_url, type, price, meta_title, meta_description, category:categories(name), creator:profiles(full_name)')
     .eq('id', id)
     .eq('status', 'approved')
     .single()
 
   if (!design) return { title: 'Design Not Found — DesignMarket' }
 
-  const title = `${design.title} — Free Download | DesignMarket`
-  const description = design.description
+  const title = design.meta_title || `${design.title} — ${design.type === 'free' ? 'Free' : `₹${design.price}`} Download | DesignMarket`
+  const description = design.meta_description || design.description
     || `Download ${design.title} ${design.type === 'free' ? 'for free' : `for ₹${design.price}`}. CDR, SVG, PSD, AI formats available on DesignMarket.`
 
   return {

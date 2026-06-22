@@ -58,12 +58,14 @@ export default function UploadPage() {
       const category_id = (form.elements.namedItem('category_id') as HTMLSelectElement).value
       const price = (form.elements.namedItem('price') as HTMLInputElement)?.value ?? '0'
       const tags = (form.elements.namedItem('tags') as HTMLInputElement).value
+      const meta_title = (form.elements.namedItem('meta_title') as HTMLInputElement).value
+      const meta_description = (form.elements.namedItem('meta_description') as HTMLTextAreaElement).value
 
       const res = await fetch('/api/designs/upload', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          title, description, category_id, type, price, tags,
+          title, description, category_id, type, price, tags, meta_title, meta_description,
           previewName: preview?.name,
           previewType: preview?.type,
           files: files.map(f => ({ name: f.name, type: f.type, size: f.size })),
@@ -167,6 +169,44 @@ export default function UploadPage() {
         )}
 
         <Input label="Tags (comma separated)" name="tags" placeholder="e.g. logo, modern, business" />
+
+        {/* SEO Section */}
+        <div className="border border-gray-200 rounded-xl p-5 space-y-4 bg-gray-50">
+          <div>
+            <p className="text-sm font-semibold text-gray-800">SEO Settings</p>
+            <p className="text-xs text-gray-500 mt-0.5">Customize how your design appears in Google search results</p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Meta Title <span className="text-gray-400 font-normal">(max 60 characters)</span>
+            </label>
+            <input
+              name="meta_title"
+              maxLength={60}
+              placeholder={`e.g. Free Business Card Template CDR Download`}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Meta Description <span className="text-gray-400 font-normal">(max 160 characters)</span>
+            </label>
+            <textarea
+              name="meta_description"
+              maxLength={160}
+              rows={2}
+              placeholder="e.g. Download this free business card template in CDR, SVG and PSD format..."
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+            />
+          </div>
+          {/* Google Preview */}
+          <div className="bg-white border border-gray-200 rounded-lg p-3">
+            <p className="text-xs text-gray-400 mb-2">Google Preview</p>
+            <p className="text-blue-600 text-sm font-medium truncate">design-marketplace-two.vercel.app/design/...</p>
+            <p className="text-green-700 text-xs">design-marketplace-two.vercel.app</p>
+            <p className="text-gray-500 text-xs mt-1 line-clamp-2">Your meta description will appear here in Google search results.</p>
+          </div>
+        </div>
 
         {/* Preview Upload */}
         <div>
