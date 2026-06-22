@@ -10,6 +10,41 @@ import { DownloadButton } from './download-button'
 
 interface Props { params: Promise<{ id: string }> }
 
+export async function generateMetadata({ params }: Props) {
+  const { id } = await params
+  const { createClient } = await import('@/lib/supabase/server')
+  const supabase = await createClient()
+  const { data: design } = await supabase
+    .from('designs')
+    .select('title, description, preview_url, type, price, category:categories(name), creator:profiles(full_name)')
+    .eq('id', id)
+    .eq('status', 'approved')
+    .single()
+
+  if (!design) return { title: 'Design Not Found — DesignMarket' }
+
+  const title = `${design.title} — Free Download | DesignMarket`
+  const description = design.description
+    || `Download ${design.title} ${design.type === 'free' ? 'for free' : `for ₹${design.price}`}. CDR, SVG, PSD, AI formats available on DesignMarket.`
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: design.preview_url ? [{ url: design.preview_url, width: 1200, height: 630 }] : [],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: design.preview_url ? [design.preview_url] : [],
+    },
+  }
+}
+
 export default async function DesignDetailPage({ params }: Props) {
   const { id } = await params
   const supabase = await createClient()

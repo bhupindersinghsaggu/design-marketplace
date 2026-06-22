@@ -9,8 +9,16 @@ export const dynamic = 'force-dynamic'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'DesignMarket — Free & Premium Design Resources',
-  description: 'Download CDR, SVG, PSD, AI files. Upload your designs and earn money.',
+  title: {
+    default: 'DesignMarket — Free & Premium Design Resources',
+    template: '%s | DesignMarket',
+  },
+  description: 'Download free and premium CDR, SVG, PSD, AI design files. Upload your designs and earn money.',
+  keywords: ['free design download', 'CDR files', 'SVG files', 'PSD files', 'design marketplace', 'graphic design'],
+  openGraph: {
+    siteName: 'DesignMarket',
+    type: 'website',
+  },
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

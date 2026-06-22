@@ -3,6 +3,12 @@ import { formatPrice } from '@/lib/utils'
 import { Check } from 'lucide-react'
 import { SubscribeButton } from './subscribe-button'
 import { SubscriptionPlan } from '@/types'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Pricing — Unlimited Design Downloads',
+  description: 'Get unlimited access to thousands of premium CDR, SVG, PSD design files. Plans starting at ₹99/month.',
+}
 
 export default async function PricingPage() {
   const supabase = await createClient()

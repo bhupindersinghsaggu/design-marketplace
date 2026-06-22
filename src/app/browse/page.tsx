@@ -2,6 +2,13 @@ import { createClient } from '@/lib/supabase/server'
 import { DesignCard } from '@/components/design/design-card'
 import { Design } from '@/types'
 import { Search } from 'lucide-react'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Browse Designs — Free CDR, SVG, PSD Downloads',
+  description: 'Browse thousands of free and premium graphic design files including CDR, SVG, PSD, and AI formats. Download instantly.',
+  keywords: ['browse designs', 'free CDR download', 'free SVG download', 'graphic design files'],
+}
 
 interface BrowsePageProps {
   searchParams: Promise<{ q?: string; category?: string; type?: string }>
