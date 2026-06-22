@@ -17,6 +17,7 @@ export default function UploadPage() {
   const [files, setFiles] = useState<File[]>([])
   const [preview, setPreview] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState('')
+  const [progress, setProgress] = useState('')
 
   useEffect(() => {
     supabase.from('categories').select('*').then(({ data }) => setCategories(data ?? []))
@@ -34,21 +35,81 @@ export default function UploadPage() {
     }
   }
 
+  async function uploadFileToR2(presignedUrl: string, file: File, mimeType?: string): Promise<boolean> {
+    const res = await fetch(presignedUrl, {
+      method: 'PUT',
+      body: file,
+      headers: { 'Content-Type': mimeType || file.type || 'application/octet-stream' },
+    })
+    return res.ok
+  }
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setError('')
     setLoading(true)
     const form = e.currentTarget
-    const formData = new FormData(form)
-    formData.set('type', type)
-    if (preview) formData.set('preview', preview)
-    files.forEach(f => formData.append('files', f))
 
-    const res = await fetch('/api/designs/upload', { method: 'POST', body: formData })
-    const data = await res.json()
+    try {
+      // Step 1: Create design + get presigned URLs
+      setProgress('Design record ban raha hai...')
+      const title = (form.elements.namedItem('title') as HTMLInputElement).value
+      const description = (form.elements.namedItem('description') as HTMLTextAreaElement).value
+      const category_id = (form.elements.namedItem('category_id') as HTMLSelectElement).value
+      const price = (form.elements.namedItem('price') as HTMLInputElement)?.value ?? '0'
+      const tags = (form.elements.namedItem('tags') as HTMLInputElement).value
+
+      const res = await fetch('/api/designs/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title, description, category_id, type, price, tags,
+          previewName: preview?.name,
+          previewType: preview?.type,
+          files: files.map(f => ({ name: f.name, type: f.type, size: f.size })),
+        }),
+      })
+      const data = await res.json()
+      if (data.error) { setError(data.error); setLoading(false); return }
+
+      const { design_id, previewUpload, fileUploads } = data
+
+      // Step 2: Upload preview directly to R2
+      if (preview && previewUpload) {
+        setProgress('Preview upload ho rahi hai...')
+        await uploadFileToR2(previewUpload.url, preview)
+      }
+
+      // Step 3: Upload design files directly to R2
+      for (let i = 0; i < fileUploads.length; i++) {
+        const fu = fileUploads[i]
+        const file = files.find(f => f.name === fu.name)
+        if (!file) continue
+        setProgress(`File upload ho rahi hai (${i + 1}/${fileUploads.length}): ${fu.name}`)
+        await uploadFileToR2(fu.url, file, fu.type)
+      }
+
+      // Step 4: Save file records in DB
+      setProgress('Finalizing...')
+      await fetch('/api/designs/upload/complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          design_id,
+          preview_key: previewUpload?.key,
+          files: fileUploads.map((fu: { key: string; name: string; type: string; size: number }) => ({
+            key: fu.key, name: fu.name, type: fu.type, size: fu.size,
+          })),
+        }),
+      })
+
+      setSuccess(true)
+    } catch {
+      setError('Upload fail hua, dobara try karein')
+    }
+
     setLoading(false)
-    if (data.error) { setError(data.error); return }
-    setSuccess(true)
+    setProgress('')
   }
 
   if (success) {
@@ -125,26 +186,37 @@ export default function UploadPage() {
 
         {/* Design Files */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Design Files (CDR, SVG, PSD, AI) *</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Design Files (CDR, SVG, PSD, AI, ZIP) *
+          </label>
           <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-indigo-400 hover:bg-indigo-50 transition-colors">
             <FileUp className="w-6 h-6 text-gray-400 mb-2" />
             <span className="text-sm text-gray-500">Files choose karein (multiple select kar sakte hain)</span>
-            <input type="file" multiple accept=".cdr,.svg,.psd,.ai,.png,.jpg,.jpeg" className="sr-only" onChange={handleFiles} required />
+            <input type="file" multiple accept=".cdr,.svg,.psd,.ai,.png,.jpg,.jpeg,.zip" className="sr-only" onChange={handleFiles} required />
           </label>
           {files.length > 0 && (
             <div className="mt-3 space-y-2">
               {files.map((f, i) => (
                 <div key={i} className="flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg">
                   <span className="text-sm text-gray-700 truncate">{f.name}</span>
-                  <button type="button" onClick={() => setFiles(files.filter((_, j) => j !== i))}>
-                    <X size={14} className="text-gray-400 hover:text-red-500" />
-                  </button>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="text-xs text-gray-400">{(f.size / 1024 / 1024).toFixed(1)} MB</span>
+                    <button type="button" onClick={() => setFiles(files.filter((_, j) => j !== i))}>
+                      <X size={14} className="text-gray-400 hover:text-red-500" />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
           )}
         </div>
 
+        {progress && (
+          <div className="flex items-center gap-2 text-sm text-indigo-600 bg-indigo-50 px-4 py-3 rounded-lg">
+            <div className="w-4 h-4 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin shrink-0" />
+            {progress}
+          </div>
+        )}
         {error && <p className="text-sm text-red-500">{error}</p>}
         <Button type="submit" loading={loading} size="lg" className="w-full">
           <Upload size={16} /> Design Upload Karein
