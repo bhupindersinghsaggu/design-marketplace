@@ -4,6 +4,8 @@ import './globals.css'
 import { Navbar } from '@/components/layout/navbar'
 import { createClient } from '@/lib/supabase/server'
 
+export const dynamic = 'force-dynamic'
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {

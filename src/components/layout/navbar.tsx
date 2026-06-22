@@ -18,8 +18,8 @@ export function Navbar({ profile }: NavbarProps) {
 
   async function logout() {
     await supabase.auth.signOut()
-    router.push('/')
     router.refresh()
+    router.push('/')
   }
 
   return (
