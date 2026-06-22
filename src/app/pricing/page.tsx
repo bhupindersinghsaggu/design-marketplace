@@ -5,6 +5,8 @@ import { SubscribeButton } from './subscribe-button'
 import { SubscriptionPlan } from '@/types'
 import type { Metadata } from 'next'
 
+export const revalidate = 3600 // re-fetch every 1 hour
+
 export const metadata: Metadata = {
   title: 'Pricing — Unlimited Design Downloads',
   description: 'Get unlimited access to thousands of premium CDR, SVG, PSD design files. Plans starting at ₹99/month.',
@@ -80,7 +82,7 @@ function PlanCard({ plan, isActive, isLoggedIn }: { plan: SubscriptionPlan; isAc
       <ul className="space-y-2 mb-6">
         {plan.features.map((f, i) => (
           <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
-            <Check size={15} className="text-green-500 mt-0.5 flex-shrink-0" /> {f}
+            <Check size={15} className="text-green-500 mt-0.5 shrink-0" /> {f}
           </li>
         ))}
       </ul>

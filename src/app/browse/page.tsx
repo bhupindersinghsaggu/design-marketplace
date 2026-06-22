@@ -4,6 +4,8 @@ import { Design } from '@/types'
 import { Search } from 'lucide-react'
 import type { Metadata } from 'next'
 
+export const revalidate = 60 // re-fetch every 1 minute
+
 export const metadata: Metadata = {
   title: 'Browse Designs — Free CDR, SVG, PSD Downloads',
   description: 'Browse thousands of free and premium graphic design files including CDR, SVG, PSD, and AI formats. Download instantly.',

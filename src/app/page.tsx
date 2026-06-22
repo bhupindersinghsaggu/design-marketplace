@@ -3,6 +3,8 @@ import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import { DesignCard } from '@/components/design/design-card'
 import { Button } from '@/components/ui/button'
+
+export const revalidate = 300 // re-fetch every 5 minutes
 import { Design } from '@/types'
 import { ArrowRight, Download, Upload, Star } from 'lucide-react'
 
