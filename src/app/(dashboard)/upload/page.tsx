@@ -18,6 +18,15 @@ export default function UploadPage() {
   const [preview, setPreview] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState('')
   const [progress, setProgress] = useState('')
+  const [slug, setSlug] = useState('')
+  const [titleVal, setTitleVal] = useState('')
+
+  function generateSlug(title: string) {
+    return title.toLowerCase().trim()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+  }
 
   useEffect(() => {
     supabase.from('categories').select('*').then(({ data }) => setCategories(data ?? []))
@@ -65,7 +74,7 @@ export default function UploadPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          title, description, category_id, type, price, tags, meta_title, meta_description,
+          title, description, category_id, type, price, tags, meta_title, meta_description, slug: slug || generateSlug(title),
           previewName: preview?.name,
           previewType: preview?.type,
           files: files.map(f => ({ name: f.name, type: f.type, size: f.size })),
@@ -135,7 +144,29 @@ export default function UploadPage() {
       <p className="text-gray-500 mb-8">After uploading, admin will review it before it goes live.</p>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <Input label="Design Title *" name="title" placeholder="e.g. Business Card Template" required />
+        <Input
+          label="Design Title *"
+          name="title"
+          placeholder="e.g. Business Card Template"
+          value={titleVal}
+          onChange={e => { setTitleVal(e.target.value); setSlug(generateSlug(e.target.value)) }}
+          required
+        />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            URL Slug <span className="text-gray-400 font-normal">(auto-generated, editable)</span>
+          </label>
+          <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-indigo-500">
+            <span className="px-3 py-2 bg-gray-50 text-gray-400 text-sm border-r border-gray-300 whitespace-nowrap">/products/</span>
+            <input
+              value={slug}
+              onChange={e => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-'))}
+              placeholder="bengali-dentist-business-card"
+              className="flex-1 px-3 py-2 text-sm focus:outline-none"
+            />
+          </div>
+          <p className="text-xs text-gray-400 mt-1">This will be the URL of your design page on Google</p>
+        </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
           <textarea name="description" rows={3} placeholder="Describe your design..."

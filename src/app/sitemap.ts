@@ -18,12 +18,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const supabase = await createClient()
     const { data: designs } = await supabase
       .from('designs')
-      .select('id, updated_at, created_at')
+      .select('id, slug, updated_at, created_at')
       .eq('status', 'approved')
       .order('created_at', { ascending: false })
 
     const designPages: MetadataRoute.Sitemap = (designs ?? []).map(d => ({
-      url: `${baseUrl}/design/${d.id}`,
+      url: d.slug ? `${baseUrl}/products/${d.slug}` : `${baseUrl}/design/${d.id}`,
       lastModified: new Date(d.updated_at || d.created_at),
       changeFrequency: 'weekly' as const,
       priority: 0.8,

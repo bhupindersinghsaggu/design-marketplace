@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
 
   const body = await req.json()
-  const { title, description, category_id, type, price, tags, meta_title, meta_description, previewName, previewType, files } = body
+  const { title, description, category_id, type, price, tags, meta_title, meta_description, slug, previewName, previewType, files } = body
 
   if (!title) return NextResponse.json({ error: 'Title is required' }, { status: 400 })
 
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
 
   const { data: design, error: designError } = await supabase
     .from('designs')
-    .insert({ creator_id: user.id, title, description, category_id, type, price: price_val, tags: tags_val, status: 'pending', meta_title: meta_title || null, meta_description: meta_description || null })
+    .insert({ creator_id: user.id, title, description, category_id, type, price: price_val, tags: tags_val, status: 'pending', meta_title: meta_title || null, meta_description: meta_description || null, slug: slug || null })
     .select()
     .single()
 
